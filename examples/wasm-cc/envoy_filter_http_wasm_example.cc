@@ -51,6 +51,9 @@ FilterHeadersStatus ExampleContext::onRequestHeaders(uint32_t, bool) {
   auto result = getRequestHeaderPairs();
   auto pairs = result->pairs();
   LOG_INFO(std::string("headers: ") + std::to_string(pairs.size()));
+  std::string route_name;
+  getValue({"route_name"}, &route_name);
+  LOG_INFO(std::string("route_name:") + route_name);
   for (auto& p : pairs) {
     LOG_INFO(std::string(p.first) + std::string(" -> ") + std::string(p.second));
   }

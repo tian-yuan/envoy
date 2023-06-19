@@ -433,6 +433,11 @@ Context::findValue(absl::string_view name, Protobuf::Arena* arena, bool last) co
   using google::api::expr::runtime::CelProtoWrapper;
   using google::api::expr::runtime::CelValue;
 
+  Envoy::Http::StreamFilterCallbacks* filter_callbacks = decoder_callbacks_;
+  if (filter_callbacks == nullptr) {
+    filter_callbacks = encoder_callbacks_;
+  }
+
   const StreamInfo::StreamInfo* info = getConstRequestStreamInfo();
 
   // Convert into a dense token to enable a jump table implementation.
@@ -546,6 +551,19 @@ Context::findValue(absl::string_view name, Protobuf::Arena* arena, bool last) co
     }
     break;
   case PropertyToken::ROUTE_NAME:
+    if (filter_callbacks) {
+      auto route = filter_callbacks->route();
+      if (route) {
+        auto route_entry = route->routeEntry();
+        if (route_entry) {
+          return CelValue::CreateString(&route_entry->routeName());
+        }
+        auto dr_entry = route->directResponseEntry();
+        if (dr_entry) {
+          return CelValue::CreateString(&dr_entry->routeName());
+        }
+      }
+    }
     if (info) {
       return CelValue::CreateString(&info->getRouteName());
     }
