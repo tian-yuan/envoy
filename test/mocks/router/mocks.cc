@@ -157,5 +157,8 @@ MockScopedRouteConfigProvider::~MockScopedRouteConfigProvider() = default;
 MockGenericConnectionPoolCallbacks::MockGenericConnectionPoolCallbacks() {
   ON_CALL(*this, upstreamToDownstream()).WillByDefault(ReturnRef(upstream_to_downstream_));
 }
+MockClusterSpecifierPlugin::MockClusterSpecifierPlugin() {
+  ON_CALL(*this, route(_, _)).WillByDefault(Return(nullptr));
+}
 } // namespace Router
 } // namespace Envoy
