@@ -1208,7 +1208,8 @@ public:
   /**
    * @return return the routeEntry for the downstream stream.
    */
-  virtual const RouteEntry& routeEntry() const PURE;
+  virtual const Route& route() const PURE;
+  //virtual const RouteEntry& routeEntry() const PURE;
   /**
    * @return return the connection for the downstream stream.
    */
