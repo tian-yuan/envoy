@@ -160,5 +160,10 @@ MockGenericConnectionPoolCallbacks::MockGenericConnectionPoolCallbacks() {
 MockClusterSpecifierPlugin::MockClusterSpecifierPlugin() {
   ON_CALL(*this, route(_, _)).WillByDefault(Return(nullptr));
 }
+
+MockClusterSpecifierPluginFactoryConfig::MockClusterSpecifierPluginFactoryConfig() {
+  ON_CALL(*this, createClusterSpecifierPlugin(_, _)).WillByDefault(Return(nullptr));
+}
+
 } // namespace Router
 } // namespace Envoy

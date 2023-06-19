@@ -601,5 +601,27 @@ public:
   NiceMock<MockUpstreamToDownstream> upstream_to_downstream_;
 };
 
+class MockClusterSpecifierPlugin : public ClusterSpecifierPlugin {
+public:
+  MockClusterSpecifierPlugin();
+
+  MOCK_METHOD(RouteConstSharedPtr, route,
+              (const RouteEntry& parent, const Http::RequestHeaderMap& header), (const));
+};
+
+class MockClusterSpecifierPluginFactoryConfig : public ClusterSpecifierPluginFactoryConfig {
+public:
+  MockClusterSpecifierPluginFactoryConfig();
+  MOCK_METHOD(ClusterSpecifierPluginSharedPtr, createClusterSpecifierPlugin,
+              (const Protobuf::Message& config,
+               Server::Configuration::CommonFactoryContext& context));
+
+  ProtobufTypes::MessagePtr createEmptyConfigProto() override {
+    return std::make_unique<ProtobufWkt::Struct>();
+  }
+
+  std::string name() const override { return "envoy.router.cluster_specifier_plugin.mock"; }
+};
+
 } // namespace Router
 } // namespace Envoy
